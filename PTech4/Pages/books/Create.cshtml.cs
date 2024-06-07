@@ -25,12 +25,18 @@ namespace PTech4.Pages.books
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
+            bool isISBNUnique = await _context.Book.AllAsync(b => b.ISBN != Book.ISBN);
 
             Book.Author = await _context.Author.FindAsync(Book.AuthorId);
             Book.Publisher = await _context.Publisher.FindAsync(Book.PublisherId);
 
-
             ModelState.ClearValidationState(nameof(Data.Book));
+
+            if (!isISBNUnique)
+            {
+                ModelState.AddModelError($"{nameof(Data.Book)}.{nameof(Book.ISBN)}", "ISBN must be unique");
+            }
+
             if (!TryValidateModel(Book, nameof(Data.Book)))
             {
                 await GetLists();

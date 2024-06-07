@@ -10,6 +10,7 @@
         public int PublisherId { get; set; }
         public Publisher Publisher { get; set; }
         public int Year { get; set; }
+
         public string ISBN { get; set; }
 
         public Book() { }
